@@ -1,0 +1,59 @@
+settings:
+  Maintainer: Solution Architecture Team
+  SchemaNamePrefix: Sat
+  
+steps:
+  - action: set-syssetting
+    description: Update sys-setting Maintainer
+    options:
+      Code: Maintainer
+      Value: "{{settings.Maintainer}}"
+      Type: Text
+  
+  - action: set-syssetting
+    description: Update sys-setting SchemaNamePrefix
+    options:
+      Code: SchemaNamePrefix
+      Value: "{{settings.SchemaNamePrefix}}"
+      Type: Text
+
+  - action: set-syssetting
+    description: Do not show widget on login page
+    options:
+      Code: ShowWidgetOnLoginPage
+      Value: false
+      Type: Boolean
+
+  - action: set-syssetting
+    description: Do not show widget on intro page
+    options:
+      Code: ShowWidgetOnIntroPage
+      Value: false
+      Type: Boolean
+
+  - action: set-syssetting
+    description: Set Default TimeZone to (Brussels, Copenhagen, Madrid, Paris (GMT+01:00))
+    options:
+      Code: DefaultTimeZone
+      Value: 12fef2c9-8baa-4b07-88e4-464169a44775
+      Type: Lookup
+
+
+  - action: set-syssetting
+    description: Set User session timeout to 720 minutes (12 hours), how long user can stay online without activity
+    options:
+      Code: UserSessionTimeout
+      Value: 720
+      Type: Integer
+
+
+
+
+  - action: install-gate
+    description: Install clio-gate
+
+  - action: restart
+    description: restart application
+
+  - action: flushdb
+    description: flush Redis database

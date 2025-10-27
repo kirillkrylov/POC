@@ -1,0 +1,11 @@
+﻿{
+  "Descriptor": {
+    "UId": "f946c81b-97d4-e90e-e678-763d8a2e159d",
+    "Name": "Tedom_Base",
+    "Type": 1,
+    "ModifiedOnUtc": "\/Date(1761224608000)\/",
+    "Maintainer": "Solution Architecture Team",
+    "ProjectPath": "Files/Tedom_Base.csproj",
+    "DependsOn": []
+  }
+}

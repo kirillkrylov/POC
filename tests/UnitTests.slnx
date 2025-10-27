@@ -1,0 +1,9 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Tedom_Base/Tedom_Base.Tests.csproj" />
+  <Project Path="../packages/Tedom_Base/Files/Tedom_Base.csproj" />
+</Solution>

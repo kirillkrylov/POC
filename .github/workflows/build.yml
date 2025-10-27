@@ -1,0 +1,85 @@
+name: Build
+on:
+  push:
+    branches:
+      - master
+      - test
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  build:
+    name: Build and Test
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1  # Shallow clones should be disabled for a better relevancy of analysis
+      
+      - name: Test Solution NetFramework
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+        shell: powershell
+        run: |
+            $ErrorActionPreference = 'Stop';
+            dotnet build-server shutdown;
+          
+            $env:CoreLibPath = '..\..\..\.application\net-framework\core-bin';
+            $env:TestCoreLibPath = '..\..\.application\net-framework\core-bin';
+            $env:TestRelativePkgFolderPath = '..\..\.application\net-framework\packages';
+            $env:RelativePkgFolderPath = '..\..\..\.application\net-framework\packages';
+            $env:CoreTargetFramework = 'net472';
+            
+            dotnet test ./tests/UnitTests.slnx `
+              /p:CollectCoverage=true `
+              /p:CoverletOutputFormat=opencover `
+              /p:CoverletOutput="..\..\TestResults\UnitTests\coverage.opencover.nf.xml"
+            $report = Get-ChildItem -Path TestResults/UnitTests -Recurse -Filter coverage.opencover.nf.xml;
+          
+      - name: Test Solution NET8
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+        shell: powershell
+        run: |
+            $ErrorActionPreference = 'Stop';
+            dotnet build-server shutdown;
+          
+            $env:CoreLibPath = '..\..\..\.application\net-core\core-bin';
+            $env:TestCoreLibPath = '..\..\.application\net-core\core-bin';
+            $env:TestRelativePkgFolderPath = '..\..\.application\net-core\packages';
+            $env:RelativePkgFolderPath = '..\..\..\.application\net-core\packages';
+            $env:CoreTargetFramework = 'netstandard2.0';
+            
+            dotnet test ./tests/UnitTests.slnx `
+              /p:CollectCoverage=true `
+              /p:CoverletOutputFormat=opencover `
+              /p:CoverletOutput="..\..\TestResults\UnitTests\coverage.opencover.n8.xml"
+            $report = Get-ChildItem -Path TestResults/UnitTests -Recurse -Filter coverage.opencover.n8.xml;
+                    
+      - name: Publish NF UnitTest Results
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop';
+          C:\Tools\reportgenerator.exe -reports:TestResults\UnitTests\coverage.opencover.nf.xml `
+          -targetdir:"D:\Projects\inetpub\wwwroot\Docs\clio\UnitTests\Html" `
+          -historydir:"D:\Projects\inetpub\wwwroot\Docs\clio\UnitTests\History" `
+          -assemblyfilters:"+Clio;-Terrasoft.*" `
+          -title:"Clio Unit Tests" `
+          -reporttypes:"Html;SonarQube;MarkdownSummaryGithub;Badges";
+        
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_URL: ${{ secrets.SONAR_URL }}
+        shell: powershell
+        run: |
+          C:\Tools\dotnet-coverage.exe collect "dotnet test .\clio.tests\clio.tests.csproj" -f xml -o "coverage.xml";
+          dotnet sonarscanner begin /k:"clio" `
+          /d:sonar.host.url="${{ secrets.SONAR_URL }}" `
+          /d:sonar.login="${{ secrets.SONAR_TOKEN }}" `
+          /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml;
+          dotnet build .\clio\clio.csproj -c Release --no-incremental;
+          dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}";
+          dotnet build-server shutdown;

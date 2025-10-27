@@ -1,0 +1,19 @@
+<Project>
+	<ItemGroup Condition="'$(PkgPath)' != ''">
+		<Compile Remove="$(PkgPath)/Tedom_Base/Assemblies/**" />
+		<Compile Remove="$(PkgPath)/Tedom_Base/Data/**" />
+		<Compile Remove="$(PkgPath)/Tedom_Base/SqlScripts/**" />
+		<Compile Remove="$(PkgPath)/Tedom_Base/Schemas\**" />
+		<Compile Remove="$(PkgPath)/Tedom_Base/Resources/**" />
+		<EmbeddedResource Remove="$(PkgPath)/Tedom_Base/Assemblies/**" />
+		<EmbeddedResource Remove="$(PkgPath)/Tedom_Base/Data/**" />
+		<EmbeddedResource Remove="$(PkgPath)/Tedom_Base/SqlScripts/**" />
+		<EmbeddedResource Remove="$(PkgPath)/Tedom_Base/Schemas/**" />
+		<EmbeddedResource Remove="$(PkgPath)/Tedom_Base/Resources/**" />
+		<None Remove="$(PkgPath)/Tedom_Base/Assemblies/**" />
+		<None Remove="$(PkgPath)/Tedom_Base/Data/**" />
+		<None Remove="$(PkgPath)/Tedom_Base/SqlScripts/**" />
+		<None Remove="$(PkgPath)/Tedom_Base/Schemas/**" />
+		<None Remove="$(PkgPath)/Tedom_Base/Resources/**" />
+  </ItemGroup>
+</Project>

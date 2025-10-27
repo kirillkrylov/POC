@@ -1,0 +1,41 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dotnet/docfx/main/schemas/docfx.schema.json",
+  "build": {
+    "content": [
+      {
+        "files": [
+          "**/*.{md,yml}"
+        ],
+        "exclude": [
+          "_site/**"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "images/**", "favicon.ico"
+        ]
+      }
+    ],
+    "output": "_site",
+    "template": [
+      "default",
+      "modern",
+      "creatio-tmpl"
+    ],
+    "globalMetadata": {
+      "_appName": "POC for Tedom",
+      "_appTitle": "POC for Tedom",
+      "_enableSearch": true,
+      "_appFaviconPath ": "favicon.ico",
+      "_appLogoPath": "images/logo.png",
+      "_appFooter": "This is my footer",
+      "_gitContribute": {
+        "repo": "https://github.com/CreatioRnDHub/POC_TEDOM.git",
+        "branch": "doc-contribution"
+      },
+      "pdf": false
+    }
+  }
+}
