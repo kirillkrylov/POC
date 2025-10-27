@@ -1,7 +1,7 @@
 **/.idea/
 **/.vscode/
 **/.vs/
-
+**/.claude
 .application/net-core
 .application/net-framework
 .nuget
