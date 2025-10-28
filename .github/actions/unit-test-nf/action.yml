@@ -13,11 +13,11 @@ runs:
   using: composite
   steps:
     - name: Build server shutdown
-      shell: powershell
+      shell: pwsh
       run: dotnet build-server shutdown
       
     - name: Set Environment Variables
-      shell: powershell
+      shell: pwsh
       run: |
         $env:CoreLibPath = '..\..\..\.application\net-framework\core-bin';
         $env:TestCoreLibPath = '..\..\.application\net-framework\core-bin';
@@ -26,12 +26,12 @@ runs:
         $env:CoreTargetFramework = 'net472';
       
     - name: Download Configuration
-      shell: powershell
+      shell: pwsh
       run: |
         ${{ inputs.tools-path }}\clio.exe dconf --build ${{ inputs.build-path }}
 
     - name: Test
-      shell: powershell
+      shell: pwsh
       run: |
         dotnet test ./tests/UnitTests.slnx `
           /p:CollectCoverage=true `
