@@ -28,9 +28,9 @@ runs:
     - name : ReportGenerator
       shell: pwsh
       run: |
-        $tool-name = "reportgenerator.exe";
+        $tool_name = "reportgenerator.exe";
         if (Test-Path TestResults/UnitTests/coverage.opencover.n8.xml) {
-            & "${{ inputs.tools-path }}\${tool-name}" `
+            & "${{ inputs.tools-path }}\${tool_name}" `
             -reports:TestResults/UnitTests/coverage.opencover.n8.xml `
             -targetdir:"docs\tests\unit\N8\Html" `
             -historydir:"docs\tests\unit\N8\History" `
@@ -42,7 +42,7 @@ runs:
         }        
         
         if (Test-Path TestResults/UnitTests/coverage.opencover.nf.xml) {
-            & "${{ inputs.tools-path }}\${tool-name}" `
+            & "${{ inputs.tools-path }}\${tool_name}" `
             -reports:TestResults/UnitTests/coverage.opencover.nf.xml `
             -targetdir:"docs\tests\unit\NF\Html" `
             -historydir:"docs\tests\unit\NF\History" `
