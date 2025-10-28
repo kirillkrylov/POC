@@ -48,7 +48,6 @@ jobs:
     steps:
       - name: Publish Unit Test Results
         uses: ./.github/actions/report-generator
-    
   
   sonar-qube:
     runs-on: self-hosted
@@ -112,18 +111,33 @@ jobs:
 
 
 
+  
+
   publish-docs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+#    runs-on: ubuntu-latest
     runs-on: self-hosted
-    needs: 
-      - sonar-qube
-      - run-unit-tests
     steps:
-      
-      - run: C:\Tools\docfx docs/docfx.json
         
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#      - name: Dotnet Setup
+#        uses: actions/setup-dotnet@v4
+#        with:
+#          dotnet-version: 8.x
+ 
+      - name: Download report files
+        uses: actions/download-artifact@v4
+        continue-on-error: false
+        with:
+          name: unit-tests-report
+          path: docs/tests/unit 
+
+      - run: dotnet tool update -g docfx
+      - run: docfx docs/docfx.json
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -131,7 +145,7 @@ jobs:
           path: 'docs/_site'
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4  
+        uses: actions/deploy-pages@v4
   
   
   deploy-uat:

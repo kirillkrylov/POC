@@ -55,4 +55,10 @@ runs:
         } else {
           Write-Host "Report file not found at TestResults/UnitTests/coverage.opencover.nf.xml. Skipping report generation."
         }
-        
+
+    - name: Upload unit test report and history
+      uses: actions/upload-artifact@v4
+      with:
+        name: unit-tests-report
+        path: docs/tests/unit
+        if-no-files-found: error
