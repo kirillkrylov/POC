@@ -1,0 +1,55 @@
+﻿name: ReportGenerator
+
+inputs:
+  tools-path:
+    description: 'Path to the tools directory for example (C:\Tools)'
+    required: false
+    default: 'C:\Tools'
+    
+description: Generate HTML report from OpenCover report
+runs:
+  using: composite
+  steps:
+
+    - name: Download coverage NET8
+      uses: actions/download-artifact@v4
+      continue-on-error: true
+      with:
+        name: coverage-opencover-n8
+        path: TestResults/UnitTests/coverage.opencover.n8.xml
+      
+    - name: Download coverage NetFramework
+      uses: actions/download-artifact@v4
+      continue-on-error: true
+      with:
+        name: coverage-opencover-nf
+        path: TestResults/UnitTests/coverage.opencover.nf.xml 
+      
+    - name : ReportGenerator
+      shell: pwsh
+      run: |
+        $tool-name = "reportgenerator.exe";
+        if (Test-Path TestResults/UnitTests/coverage.opencover.n8.xml) {
+            & "${{ inputs.tools-path }}\${tool-name}" `
+            -reports:TestResults/UnitTests/coverage.opencover.n8.xml `
+            -targetdir:"docs\tests\unit\N8\Html" `
+            -historydir:"docs\tests\unit\N8\History" `
+            -assemblyfilters:"+Tedom_Base;-Terrasoft.*" `
+            -title:"Unit Tests (NET8)" `
+            -reporttypes:"Html;MarkdownSummaryGithub;";
+        } else {
+          Write-Host "Report file not found at TestResults/UnitTests/coverage.opencover.n8.xml. Skipping report generation."
+        }        
+        
+        if (Test-Path TestResults/UnitTests/coverage.opencover.nf.xml) {
+            & "${{ inputs.tools-path }}\${tool-name}" `
+            -reports:TestResults/UnitTests/coverage.opencover.nf.xml `
+            -targetdir:"docs\tests\unit\NF\Html" `
+            -historydir:"docs\tests\unit\NF\History" `
+            -assemblyfilters:"+Tedom_Base;-Terrasoft.*" `
+            -title:"Unit Tests (NetFramework)" `
+            -reporttypes:"Html;MarkdownSummaryGithub;";
+        } else {
+          Write-Host "Report file not found at TestResults/UnitTests/coverage.opencover.nf.xml. Skipping report generation."
+        }
+        

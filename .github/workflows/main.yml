@@ -21,15 +21,10 @@ concurrency:
 jobs:
   run-unit-tests:
     runs-on: self-hosted
-   
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Allow PowerShell scripts
-        run: Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
-        shell: pwsh
-      
+     
       - name: Unit Test NET8
         uses: ./.github/actions/unit-test-n8
         with: 
@@ -39,4 +34,11 @@ jobs:
         uses: ./.github/actions/unit-test-nf
         with:
           build-path: 'C:\CreatioProductBuild\8.3.1.4437_SalesEnterprise_Marketing_ServiceEnterprise_Softkey_PostgreSQL_ENU'
+
+  publish-unit-test-results:
+    runs-on: self-hosted
+    needs: run-unit-tests
+    steps:
+      - name: Publish Unit Test Results
+        uses: ./.github/actions/report-generator 
           

@@ -34,3 +34,10 @@ runs:
           /p:CollectCoverage=true `
           /p:CoverletOutputFormat=opencover `
           /p:CoverletOutput="..\..\TestResults\UnitTests\coverage.opencover.nf.xml"
+
+    - name: Upload NetFramework coverage
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-opencover-nf
+        path: TestResults/UnitTests/coverage.opencover.nf.xml
+        if-no-files-found: error
