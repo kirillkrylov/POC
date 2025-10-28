@@ -17,13 +17,19 @@ permissions:
 concurrency:
   group: "unit-test"
   cancel-in-progress: false
-
+  
 jobs:
   run-unit-tests:
     runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Enable PowerShell scripts (process scope)
+        shell: powershell
+        run: |
+          Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process -Force
+          Get-ExecutionPolicy -List
       
       - name: Unit Test NET8
         uses: ./.github/actions/unit-test-n8
