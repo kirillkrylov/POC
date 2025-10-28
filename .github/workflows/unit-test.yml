@@ -20,7 +20,7 @@ concurrency:
   
 jobs:
   run-unit-tests:
-    runs-on: [self-hosted, K_KRYLOV_N]
+    runs-on: self-hosted
    
     steps:
       - name: Checkout
