@@ -53,18 +53,18 @@ jobs:
   sonar-qube:
     runs-on: self-hosted
     needs: run-unit-tests
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
       - name: SonarQube begin
         shell: pwsh
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           $projectBaseDir = Join-Path (Get-Location) "packages";
           
           C:\Tools\dotnet-sonarscanner.exe begin `
             /o:"kirillkrylov" `
             /k:"kirillkrylov_POC" `
-            /d:sonar.token="$SONAR_TOKEN" `
+            /d:sonar.token="${{SONAR_TOKEN}}" `
             /d:sonar.scanner.scanAll=false `
             /d:sonar.projectBaseDir=$projectBaseDir `
             /d:sonar.cs.opencover.reportsPaths="TestResults/UnitTests/coverage.opencover.nf.xml,TestResults/UnitTests/coverage.opencover.n8.xml" `
@@ -108,18 +108,15 @@ jobs:
       - name: Run SonarQube end
         shell: pwsh
         run: |
-          C:\Tools\dotnet-sonarscanner.exe end /d:sonar.token="$SONAR_TOKEN"
+          C:\Tools\dotnet-sonarscanner.exe end /d:sonar.token="${{SONAR_TOKEN}}"
           
 
-  
-    
-          
-  
 
   deploy-uat:
     if: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[deploy-uat]') }}
     runs-on: self-hosted
     environment: UAT
+    needs: sonar-qube
     env:
       url: ${{ vars.CREATIO_URL }}
       isNetCore: ${{ vars.IS_NETCORE }}
