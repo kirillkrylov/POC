@@ -118,16 +118,16 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-#    runs-on: ubuntu-latest
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
+#    runs-on: self-hosted
     steps:
         
       - name: Checkout
         uses: actions/checkout@v4
-#      - name: Dotnet Setup
-#        uses: actions/setup-dotnet@v4
-#        with:
-#          dotnet-version: 8.x
+      - name: Dotnet Setup
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
  
       - name: Download report files
         uses: actions/download-artifact@v4
