@@ -1,5 +1,7 @@
 ﻿name: Dotnet Test NET8
-
+branding: 
+  icon: check-circle
+  color: green
 inputs:
   build-path:
     description: 'Path to the build directory or zip file'
@@ -12,7 +14,7 @@ inputs:
 description: Restore, build, test with coverage
 runs:
   using: composite
-  steps:
+  steps:  
     - name: Build server shutdown
       shell: pwsh
       run: dotnet build-server shutdown

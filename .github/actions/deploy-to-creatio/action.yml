@@ -1,0 +1,71 @@
+﻿name: Deploy to Creatio
+branding: 
+  icon: upload-cloud
+  color: green
+inputs:
+  creatio-url:
+    description: 'Url of Creatio instance example: https://my-instance.creatio.com'
+    required: true
+  creatio-username:
+    description: 'Creatio Login (username) example: Supervisor'
+    required: true
+    default: 'Supervisor'
+  creatio-password:
+    description: 'Creatio Password example: Supervisor'
+    required: true
+    default: 'Supervisor'
+  creatio-is-netcore:
+    description: 'When instance is NET8 or higher set to true, default: false'
+    required: false 
+    default: 'false'
+  tools-path:
+    description: 'Path to the tools directory for example (C:\Tools)'
+    required: false
+    default: 'C:\Tools'
+description: Deploys to Creatio
+runs:
+  using: composite
+   
+  steps:
+    - name: Health Check (WebHost)
+      shell: pwsh
+      run: |
+        ${{ inputs.tools-path }}\clio.exe healthcheck -a true `
+          -u ${{ inputs.creatio-url }} -l ${{ inputs.creatio-username }} -p ${{ inputs.creatio-password }} -i ${{ inputs.creatio-is-netcore }}
+    
+    - name: Health Check (WebApp)
+      shell: pwsh
+      run: |
+        ${{ inputs.tools-path }}\clio.exe healthcheck -h true `
+          -u ${{ inputs.creatio-url }} -l ${{ inputs.creatio-username }} -p ${{ inputs.creatio-password }} -i ${{ inputs.creatio-is-netcore }}
+        
+      
+    - name: Push workspace
+      shell: pwsh
+      run: |
+        ${{ inputs.tools-path }}\clio.exe pushw --use-application-installer `
+        -u ${{ inputs.creatio-url }} -l ${{ inputs.creatio-username }} -p ${{ inputs.creatio-password }} -i ${{ inputs.creatio-is-netcore }}
+
+    - name: Restart Creatio
+      shell: pwsh
+      run: |
+        ${{ inputs.tools-path }}\clio.exe flishdb --use-application-installer `
+        -u ${{ inputs.creatio-url }} -l ${{ inputs.creatio-username }} -p ${{ inputs.creatio-password }} -i ${{ inputs.creatio-is-netcore }}
+    
+    - name: Flush Redis
+      shell: pwsh
+      run: |
+        ${{ inputs.tools-path }}\clio.exe flishdb --use-application-installer `
+        -u ${{ inputs.creatio-url }} -l ${{ inputs.creatio-username }} -p ${{ inputs.creatio-password }} -i ${{ inputs.creatio-is-netcore }}
+
+    - name: Health Check (WebHost)
+      shell: pwsh
+      run: |
+        ${{ inputs.tools-path }}\clio.exe healthcheck -a true `
+          -u ${{ inputs.creatio-url }} -l ${{ inputs.creatio-username }} -p ${{ inputs.creatio-password }} -i ${{ inputs.creatio-is-netcore }}
+
+    - name: Health Check (WebApp)
+      shell: pwsh
+      run: |
+        ${{ inputs.tools-path }}\clio.exe healthcheck -h true `
+          -u ${{ inputs.creatio-url }} -l ${{ inputs.creatio-username }} -p ${{ inputs.creatio-password }} -i ${{ inputs.creatio-is-netcore }}
