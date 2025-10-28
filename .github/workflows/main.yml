@@ -70,7 +70,6 @@ jobs:
             /d:sonar.sourceEncoding=UTF-8 `
             /d:sonar.qualitygate.wait=true `
           
-          dotnet build ./.solution/CreatioPackages.slns -c Release /nodereuse:false;
           
           C:\Tools\dotnet-sonarscanner.exe end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
           
