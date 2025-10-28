@@ -1,0 +1,39 @@
+﻿name: Dotnet Test NetFramework
+
+inputs:
+  build-path:
+    description: 'Path to the build directory or zip file'
+    required: true
+  tools-path:
+    description: 'Path to the tools directory for example (C:\Tools)'
+    required: false
+    default: 'C:\Tools'    
+description: Restore, build, test with coverage
+runs:
+  using: composite
+  steps:
+    - name: Build server shutdown
+      shell: powershell
+      run: dotnet build-server shutdown
+      
+    - name: Set Environment Variables
+      shell: powershell
+      run: |
+        $env:CoreLibPath = '..\..\..\.application\net-framework\core-bin';
+        $env:TestCoreLibPath = '..\..\.application\net-framework\core-bin';
+        $env:TestRelativePkgFolderPath = '..\..\.application\net-framework\packages';
+        $env:RelativePkgFolderPath = '..\..\..\.application\net-framework\packages';
+        $env:CoreTargetFramework = 'net472';
+      
+    - name: Download Configuration
+      shell: powershell
+      run: |
+        ${{ inputs.tools-path }}\clio.exe dconf --build ${{ inputs.build-path }}
+
+    - name: Test
+      shell: powershell
+      run: |
+        dotnet test ./tests/UnitTests.slnx `
+          /p:CollectCoverage=true `
+          /p:CoverletOutputFormat=opencover `
+          /p:CoverletOutput="..\..\TestResults\UnitTests\coverage.opencover.nf.xml"

@@ -1,0 +1,40 @@
+﻿name: Dotnet Test NET8
+
+inputs:
+  build-path:
+    description: 'Path to the build directory or zip file'
+    required: true
+  tools-path:
+    description: 'Path to the tools directory for example (C:\Tools)'
+    required: false
+    default: 'C:\Tools'
+    
+description: Restore, build, test with coverage
+runs:
+  using: composite
+  steps:
+    - name: Build server shutdown
+      shell: powershell
+      run: dotnet build-server shutdown
+      
+    - name: Set Environment Variables
+      shell: powershell
+      run: |
+        $env:CoreLibPath = '..\..\..\.application\net-core\core-bin';
+        $env:TestCoreLibPath = '..\..\.application\net-core\core-bin';
+        $env:TestRelativePkgFolderPath = '..\..\.application\net-core\packages';
+        $env:RelativePkgFolderPath = '..\..\..\.application\net-core\packages';
+        $env:CoreTargetFramework = 'netstandard2.0';
+      
+    - name: Download Configuration
+      shell: powershell
+      run: |
+        ${{ inputs.tools-path }}\clio.exe dconf --build ${{ inputs.build-path }}
+    
+    - name: Test
+      shell: powershell
+      run: |
+        dotnet test ./tests/UnitTests.slnx `
+          /p:CollectCoverage=true `
+          /p:CoverletOutputFormat=opencover `
+          /p:CoverletOutput="..\..\TestResults\UnitTests\coverage.opencover.n8.xml"

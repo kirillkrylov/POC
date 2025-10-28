@@ -14,7 +14,12 @@
     "resource": [
       {
         "files": [
-          "images/**", "favicon.ico"
+          "images/**", 
+          "favicon.ico",
+          "tests/unit/NF/HTML/*.{svg,html,htm,js,css}",
+          "tests/unit/NF/History/*.xml",
+          "tests/unit/N8/HTML/*.{svg,html,htm,js,css}",
+          "tests/unit/N8/History/*.xml"
         ]
       }
     ],

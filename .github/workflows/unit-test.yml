@@ -1,0 +1,37 @@
+﻿# Your GitHub workflow file under .github/workflows/
+# Trigger the action on push to any branch
+on:
+  push:
+    branches: ['*']
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  actions: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "unit-test"
+  cancel-in-progress: false
+
+jobs:
+  run-unit-tests:
+    runs-on: K_KRYLOV_N
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Unit Test NET8
+        uses: ./.github/actions/unit-test-n8
+        with: 
+          build-path: 'C:\CreatioProductBuild\8.3.1.4439_SalesEnterprise_Marketing_ServiceEnterpriseNet8_Softkey_PostgreSQL_ENU'
+
+      - name: Unit Test NetFramework
+        uses: ./.github/actions/unit-test-nf
+        with:
+          build-path: 'C:\CreatioProductBuild\8.3.1.4437_SalesEnterprise_Marketing_ServiceEnterprise_Softkey_PostgreSQL_ENU'
+          

@@ -1,2 +1,6 @@
 - name: Docs
   href: docs/
+- name: CICD
+  href: cicd/
+- name: Tests
+  href: tests/
