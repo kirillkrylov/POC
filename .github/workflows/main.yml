@@ -117,7 +117,9 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: self-hosted
-    needs: sonar-qube
+    needs: 
+      - sonar-qube
+      - run-unit-tests
     steps:
       
       - run: C:\Tools\docfx docs/docfx.json
