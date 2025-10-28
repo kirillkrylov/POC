@@ -16,16 +16,7 @@ runs:
     - name: Build server shutdown
       shell: pwsh
       run: dotnet build-server shutdown
-      
-    - name: Set Environment Variables
-      shell: pwsh
-      run: |
-        $env:CoreLibPath = '..\..\..\.application\net-core\core-bin';
-        $env:TestCoreLibPath = '..\..\.application\net-core\core-bin';
-        $env:TestRelativePkgFolderPath = '..\..\.application\net-core\packages';
-        $env:RelativePkgFolderPath = '..\..\..\.application\net-core\packages';
-        $env:CoreTargetFramework = 'netstandard2.0';
-      
+            
     - name: Download Configuration
       shell: pwsh
       run: |
@@ -34,6 +25,12 @@ runs:
     - name: Test
       shell: pwsh
       run: |
+        $env:CoreLibPath = '..\..\..\.application\net-core\core-bin';
+        $env:TestCoreLibPath = '..\..\.application\net-core\core-bin';
+        $env:TestRelativePkgFolderPath = '..\..\.application\net-core\packages';
+        $env:RelativePkgFolderPath = '..\..\..\.application\net-core\packages';
+        $env:CoreTargetFramework = 'netstandard2.0';
+        
         dotnet test ./tests/UnitTests.slnx `
           /p:CollectCoverage=true `
           /p:CoverletOutputFormat=opencover `
