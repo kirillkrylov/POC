@@ -36,10 +36,10 @@ runs:
           /p:CoverletOutputFormat=opencover `
           /p:CoverletOutput="..\..\TestResults\UnitTests\coverage.opencover.n8.xml"
 
-    - name: Upload NET8 coverage
-      uses: actions/upload-artifact@v4
-      with:
-        name: coverage-opencover-n8
-        path: TestResults/UnitTests/coverage.opencover.n8.xml
-        if-no-files-found: error
+#    - name: Upload NET8 coverage
+#      uses: actions/upload-artifact@v4
+#      with:
+#        name: coverage-opencover-n8
+#        path: TestResults/UnitTests/coverage.opencover.n8.xml
+#        if-no-files-found: error
       
