@@ -114,20 +114,14 @@ jobs:
 
   publish-docs:
     environment:
-      name: self-hosted
+      name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
+    needs: sonar-qube
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Dotnet Setup
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 8.x
-
-      - run: dotnet tool update -g docfx
-      - run: docfx docs/docfx.json
-
+      
+      - run: C:\Tools\docfx docs/docfx.json
+        
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
