@@ -6,7 +6,7 @@
 .application/net-framework
 .nuget
 docs/_site
-
+**/.sonarqube
 
 **/[B-b]in/
 **/[O-o]bj/
