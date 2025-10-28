@@ -51,7 +51,7 @@ Report is Allure
 
 
 <!-- named links -->
-[Unit-NF]: ./unit/NF/HTML/index.html
-[Unit-N8]: ./unit/N8/HTML/index.html
+[Unit-NF]: ./unit/NF/Html/index.html
+[Unit-N8]: ./unit/N8/Html/index.html
 [E2E-NF]: ./e2e/NF/HTML/index.html
 [E2E-N8]: ./e2e/N8/HTML/index.html
