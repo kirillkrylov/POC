@@ -64,7 +64,7 @@ jobs:
           C:\Tools\dotnet-sonarscanner.exe begin `
             /o:"kirillkrylov" `
             /k:"kirillkrylov_POC" `
-            /d:sonar.token="${{SONAR_TOKEN}}" `
+            /d:sonar.token="${{env.SONAR_TOKEN}}" `
             /d:sonar.scanner.scanAll=false `
             /d:sonar.projectBaseDir=$projectBaseDir `
             /d:sonar.cs.opencover.reportsPaths="TestResults/UnitTests/coverage.opencover.nf.xml,TestResults/UnitTests/coverage.opencover.n8.xml" `
@@ -108,7 +108,7 @@ jobs:
       - name: Run SonarQube end
         shell: pwsh
         run: |
-          C:\Tools\dotnet-sonarscanner.exe end /d:sonar.token="${{SONAR_TOKEN}}"
+          C:\Tools\dotnet-sonarscanner.exe end /d:sonar.token="${{env.SONAR_TOKEN}}"
           
 
 
