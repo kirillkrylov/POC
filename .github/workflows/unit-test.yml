@@ -20,17 +20,12 @@ concurrency:
   
 jobs:
   run-unit-tests:
-    runs-on: self-hosted
+    runs-on: [self-hosted, K_KRYLOV_N]
+   
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Enable PowerShell scripts (process scope)
-        shell: powershell
-        run: |
-          Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process -Force
-          Get-ExecutionPolicy -List
-      
+     
       - name: Unit Test NET8
         uses: ./.github/actions/unit-test-n8
         with: 
